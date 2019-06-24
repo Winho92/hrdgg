@@ -1,0 +1,159 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<style>
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+#header {
+	background-color: black;
+	height: 130px;
+	width: 100%;
+	color: white;
+}
+
+#headerDiv1 {
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+	height: 80px;
+	font-size: 20px;
+	padding: 5px;
+}
+
+#header .loginBtnDiv {
+	margin-right: 10px;
+	vertical-align: middle;
+	float: right;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+#header .btnStyle {
+	font-size: 15px;
+	margin: 0 5px;
+	padding: .5rem 1rem;
+	border-radius: .25rem;
+	color: white;
+	background-color: #00A6BB;
+	border: 1px solid #00A6BB;
+}
+
+#header .headerImgDiv {
+	margin-left: 20px;
+	display: inline-block;
+	position: relative;
+}
+
+#header .loginBtnDiv img {
+	vertical-align: middle;
+}
+
+#headerDiv2 {
+	overflow: hidden;
+	width: 100%;
+	background-color: #313641;
+	height: 50px;
+	color: white;
+}
+
+#headerDiv2 li {
+	padding: 15px;
+	text-align: center;
+	width: 120px;
+	height: 40px;
+	list-style-type: none;
+	float: left;
+}
+
+#headerDiv2 a {
+	text-decoration: none;
+	padding: 5px;
+	height: 100%;
+	color: aliceblue;
+}
+
+#headerDiv2 a:hover {
+	text-decoration: none;
+	height: 100%;
+}
+
+#headerDiv2 .searchDiv {
+	position: relative;
+    display: inline-block;
+    float: right;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+#headerDiv2 .text2 {
+	border-radius: 10px;
+	border-color: orange;
+	height: 40px;
+	font-size: 15px;
+	background-color: black;
+	color: white;
+	vertical-align: middle;
+}
+
+#headerDiv2 .img {
+	vertical-align: middle;
+	background: url(/img/cc.jpg) no-repeat left top;
+	background-size: 40px;
+	border-radius: 10px;
+	border-color: orange;
+	width: 40px;
+	height: 40px;
+}
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+	$(document).on('ready', function() {
+		var url = window.location.href;
+		var uri = url.substring(21);
+
+		$('#loginBtn').on('click', function() {
+			location.href = '/Login/?cp=' + uri;
+		})
+	});
+</script>
+
+<header id="header">
+	<div id="headerDiv1">
+		<div class="headerImgDiv">
+			<img src="/img/12.jpg" width="130px" style="margin: 0 0 5px;" onclick="location.href='/'">
+			<img src="/img/lol1.jpg" width="150px"
+				onclick="location.href='http://www.leagueoflegends.co.kr/'">
+		</div>
+		<div class="loginBtnDiv">
+			<c:choose>
+				<c:when test="${user == null}">
+					<button type="button" id="loginBtn" class="btnStyle">로그인</button>
+					<button type="button" class="btnStyle"
+						onclick="location.href='/Join/'">회원가입</button>
+				</c:when>
+				<c:otherwise>
+					<span>${user.username}</span>
+<%-- 					<span>${user.usergrd}</span> --%>
+					<button type="button" onclick="location.href='/Login/Logout'"
+						style="border: none; background: none; color: orange;">로그아웃</button>
+				</c:otherwise>
+			</c:choose>
+		</div>
+	</div>
+	<div id="headerDiv2">
+		<ul>
+			<li><a href="/">홈</a></li>
+			<li><a href="/champion">챔피언 분석</a></li>
+			<li><a href="/ranking?league=challengerleagues&page=1">랭킹</a></li>
+			<li><a href="/Board/ListPaging?menu_id=MENU01&now_page=1&per_page=10">커뮤니티</a></li>
+		</ul>
+		<div class="searchDiv">
+			<input type="text" class="text2" placeholder="아이디 검색">
+			<input type="submit" class="img" value=""/>
+		</div>
+	</div>
+</header>

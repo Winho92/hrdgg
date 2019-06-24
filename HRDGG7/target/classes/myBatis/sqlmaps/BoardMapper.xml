@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Board">
+ 
+ 	<resultMap id="boardMap" type="com.spring.board.BoardVo">
+		<result property="idx" column="IDX" javaType="int" />
+		<result property="menu_id" column="MENU_ID" javaType="string" />
+		<result property="title" column="TITLE" javaType="string" />
+		<result property="cont" column="CONT" javaType="string" />
+		<result property="writer" column="WRITER" javaType="string" />
+		<result property="regdate" column="REGDATE" javaType="string" />
+		<result property="readcount" column="READCOUNT" javaType="int" />
+		<result property="bnum" column="BNUM" javaType="int" />
+		<result property="lvl" column="LVL" javaType="int" />
+		<result property="step" column="STEP" javaType="int" />
+		<result property="nref" column="NREF" javaType="int" />
+		<result property="delnum" column="DELNUM" javaType="int" />
+	</resultMap>
+ 
+	<select id="List" statementType="CALLABLE"
+		parameterType="hashmap" resultType="com.spring.board.BoardVo">
+		{ CALL PKG_BOARD.PROC_BOARD_LIST(
+			#{ menu_id, mode=IN, jdbcType=VARCHAR },
+			#{ result, 	mode=OUT, jdbcType=CURSOR, javaType=ResultSet,
+			resultMap=boardMap }
+		)}
+	</select>
+	
+	<select id="ListPaging" statementType="CALLABLE"
+		parameterType="hashmap" resultType="com.spring.board.BoardVo">
+		{ CALL PKG_BOARD.PROC_BOARD_PAGING(
+			#{ menu_id,  mode=IN, jdbcType=VARCHAR },
+			#{ now_page, mode=IN, jdbcType=INTEGER },
+			#{ per_page, mode=IN, jdbcType=INTEGER },			
+			#{ totalcnt, mode=OUT, jdbcType=INTEGER, javaType=int},
+			#{ result, 	 mode=OUT, jdbcType=CURSOR, javaType=ResultSet,
+			resultMap=boardMap }
+		)}
+	</select>
+	
+	<select id="Cont" statementType="CALLABLE"
+		parameterType="hashmap" resultType="com.spring.board.BoardVo">
+		{ CALL PKG_BOARD.PROC_BOARD_VIEW(
+			#{ idx, 	mode=IN, jdbcType=INTEGER },
+			#{ result,	mode=OUT, jdbcType=CURSOR,
+			javaType=ResultSet, resultMap=boardMap }
+		)}
+	</select>
+	
+	<insert id="Write" statementType="CALLABLE"
+		parameterType="hashmap">
+		{ CALL PKG_BOARD.PROC_BOARD_INSERT(
+			#{ menu_id, mode=IN, jdbcType=VARCHAR },
+			#{ title, 	mode=IN, jdbcType=VARCHAR },
+			#{ cont, 	mode=IN, jdbcType=VARCHAR },
+			#{ writer, 	mode=IN, jdbcType=VARCHAR },
+			#{ bnum,	mode=IN, jdbcType=INTEGER },
+			#{ lvl, 	mode=IN, jdbcType=INTEGER },
+			#{ step,	mode=IN, jdbcType=INTEGER },
+			#{ nref,	mode=IN, jdbcType=INTEGER },
+			
+			#{filenames, mode=IN,  javaType=Object, jdbcType=ARRAY, jdbcTypeName=FILE_ARRAY,
+  	    		typeHandler=com.spring.board.file.ListMapTypeHandler },
+  	    	
+  	    	#{fileexts, mode=IN,  javaType=Object, jdbcType=ARRAY, jdbcTypeName=FILE_ARRAY,
+  	    		typeHandler=com.spring.board.file.ListMapTypeHandler },
+  	    	
+  	    	#{sfilenames, mode=IN,  javaType=Object, jdbcType=ARRAY, jdbcTypeName=FILE_ARRAY,
+  	    		typeHandler=com.spring.board.file.ListMapTypeHandler }
+		)}
+	</insert>
+	
+	<delete id="Remove" statementType="CALLABLE"
+		parameterType="com.spring.board.BoardVo">
+		{ CALL PKG_BOARD.PROC_BOARD_DELETE(
+			#{ idx, 	mode=IN, jdbcType=INTEGER }
+		)}
+	</delete>
+	
+	<update id="Update" statementType="CALLABLE"
+		parameterType="hashmap">
+		{ CALL PKG_BOARD.PROC_BOARD_UPDATE(
+			#{ idx,		mode=IN, jdbcType=INTEGER },
+			#{ title, 	mode=IN, jdbcType=VARCHAR },
+			#{ cont, 	mode=IN, jdbcType=VARCHAR },
+			
+			#{filenames, mode=IN,  javaType=Object, jdbcType=ARRAY, jdbcTypeName=FILE_ARRAY,
+  	    		typeHandler=com.spring.board.file.ListMapTypeHandler },
+  	    	
+  	    	#{fileexts, mode=IN,  javaType=Object, jdbcType=ARRAY, jdbcTypeName=FILE_ARRAY,
+  	    		typeHandler=com.spring.board.file.ListMapTypeHandler },
+  	    	
+  	    	#{sfilenames, mode=IN,  javaType=Object, jdbcType=ARRAY, jdbcTypeName=FILE_ARRAY,
+  	    		typeHandler=com.spring.board.file.ListMapTypeHandler }
+			
+		)}
+	</update>
+	
+	<select id="Search" statementType="CALLABLE"
+		parameterType="hashmap" resultType="com.spring.board.BoardVo">
+		{ CALL PKG_BOARD.PROC_BOARD_SEARCH(
+			#{ menu_id,  mode=IN, jdbcType=VARCHAR },
+			#{ now_page, mode=IN, jdbcType=INTEGER },
+			#{ per_page, mode=IN, jdbcType=INTEGER }, 
+			#{ target,	 mode=IN, jdbcType=VARCHAR },
+			#{ search, 	 mode=IN, jdbcType=VARCHAR },
+			#{ totalcnt, mode=OUT, jdbcType=INTEGER, javaType=int},
+			#{ result, 	 mode=OUT, jdbcType=CURSOR, javaType=ResultSet,
+			resultMap=boardMap }
+		)}
+	</select>
+	
+	
+	<!-- 파일 -->
+	<resultMap id="FileMap" type="com.spring.board.file.FilesVo">
+   		<result property="file_num"		column="FILE_NUM"	javaType="int" />
+   		<result property="idx"			column="IDX"		javaType="int" />
+   		<result property="filename"		column="FILENAME"	javaType="string" />
+   		<result property="fileext"		column="FILEEXT"	javaType="string" />
+   		<result property="sfilename"	column="SFILENAME"	javaType="string" />
+   	</resultMap>
+	
+	<select id="FileList"
+   		statementType="CALLABLE"
+   		parameterType="hashmap"
+   		resultType="com.spring.board.file.FilesVo">
+	 {CALL PKG_BOARD.PROC_BOARD_FILELIST(
+	 	#{ idx,		mode=IN,	jdbcType=INTEGER },
+	 	#{ result,	mode=OUT,	jdbcType=CURSOR,	javaType=ResultSet,	resultMap=FileMap }
+	 
+	 )} 		  	
+   	</select>
+   	
+   	<delete id="FileDelete" statementType="CALLABLE"
+		parameterType="hashmap">
+		{ CALL PKG_BOARD.PROC_BOARD_FILEDELETE(
+			#{ file_num, 	mode=IN,  jdbcType=INTEGER }
+		)}
+	</delete>
+
+	<select id="FileGet" statementType="CALLABLE"
+		parameterType="hashmap" resultType="com.spring.board.file.FilesVo">
+		{ CALL PKG_BOARD.PROC_BOARD_FILEGET(
+			#{ file_num, mode=IN, jdbcType=INTEGER },
+			#{ result, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=FileMap }
+		)}
+	</select>
+ 
+ 
+ </mapper>

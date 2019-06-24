@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Reply">
+ 
+ 	<resultMap id="replyMap" type="com.spring.reply.ReplyVo">
+		<result property="idx" column="IDX" javaType="int" />
+		<result property="menu_id" column="MENU_ID" javaType="string" />
+		<result property="cont" column="CONT" javaType="string" />
+		<result property="writer" column="WRITER" javaType="string" />
+		<result property="regdate" column="REGDATE" javaType="string" />
+		<result property="readcount" column="READCOUNT" javaType="int" />
+		<result property="rnum" column="RNUM" javaType="int" />
+		<result property="lvl" column="LVL" javaType="int" />
+		<result property="step" column="STEP" javaType="int" />
+		<result property="nref" column="NREF" javaType="int" />
+		<result property="delnum" column="DELNUM" javaType="int" />
+	</resultMap>
+ 
+	<select id="List" statementType="CALLABLE"
+		parameterType="hashmap" resultType="com.spring.reply.ReplyVo">
+		{ CALL PKG_REPLY.PROC_REPLY_LIST(
+			#{ idx, mode=IN, jdbcType=INTEGER },
+			#{ result, mode=OUT, jdbcType=CURSOR, javaType=ResultSet,
+			resultMap=replyMap }
+		)}
+
+	</select>
+	
+	<select id="Cont" statementType="CALLABLE"
+		parameterType="hashmap" resultType="com.spring.reply.ReplyVo">
+		{ CALL PKG_REPLY.PROC_REPLY_VIEW(
+			#{ idx, mode=IN, jdbcType=INTEGER },
+			#{ result, mode=OUT, jdbcType=CURSOR,
+			javaType=ResultSet, resultMap=boardMap }
+		)}
+	</select>
+	
+	<insert id="Write" statementType="CALLABLE"	
+		parameterType="com.spring.reply.ReplyVo">
+		{ CALL PKG_REPLY.PROC_REPLY_INSERT(
+			#{ idx, mode=IN, jdbcType=INTEGER },
+			#{ cont, mode=IN, jdbcType=VARCHAR },
+			#{ writer, mode=IN, jdbcType=VARCHAR },
+			#{ rnum, mode=IN, jdbcType=INTEGER },
+			#{ lvl, mode=IN, jdbcType=INTEGER },
+			#{ step, mode=IN, jdbcType=INTEGER },
+			#{ nref, mode=IN, jdbcType=INTEGER }
+		)}
+	</insert>
+	
+	<delete id="Remove" statementType="CALLABLE"
+		parameterType="com.spring.reply.ReplyVo">
+		{ CALL PKG_REPLY.PROC_REPLY_DELETE(
+			#{ idx, mode=IN, jdbcType=INTEGER },
+			#{ regdate, mode=IN, jdbcType=VARCHAR }
+		)}
+	</delete>
+	
+</mapper>
+	
+
+	

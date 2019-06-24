@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Riot">
+	<resultMap id="ChampMap" type="com.spring.riot.vo.ChampionVo">
+		<result property="name"			column="NAME"			javaType="string" />
+		<result property="image"		column="IMAGE"			javaType="string" />
+		<result property="key"			column="KEY"			javaType="int" />
+		<result property="id"			column="ID"				javaType="string" />
+		<result property="title"		column="TITLE"			javaType="string" />
+		<result property="skins"		column="SKINS"			javaType="string" />
+		<result property="lore"			column="LORE"			javaType="string" />
+		<result property="info"			column="INFO"			javaType="string" />
+		<result property="tags"			column="TAGS"			javaType="string" />
+		<result property="stats"		column="STATS"			javaType="string" />
+		<result property="passive"		column="PASSIVE"		javaType="string" />
+		<result property="spellQ"		column="SPELLQ"			javaType="string" />
+		<result property="spellW"		column="SPELLW"			javaType="string" />
+		<result property="spellE"		column="SPELLE"			javaType="string" />
+		<result property="spellR"		column="SPELLR"			javaType="string" />
+	</resultMap>
+	
+	<select id="SelectAllChamp" statementType="CALLABLE" parameterType="hashMap" resultType="com.spring.riot.vo.ChampionVo">
+		{CALL PKG_CHAMPIONS.PROC_SELECT_ALL_CHAMP(
+			#{result, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=ChampMap}
+		)}
+	</select>
+	
+	<select id="SelectChamp" statementType="CALLABLE" parameterType="hashMap" resultType="com.spring.riot.vo.ChampionVo">
+		{CALL PKG_CHAMPIONS.PROC_SELECT_CHAMP(
+			#{champName, mode=IN, jdbcType=VARCHAR},
+			#{result,    mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=ChampMap}
+		)}
+	</select>
+
+  	<insert id="InsertChamp" statementType="CALLABLE" parameterType="hashMap">
+  		{CALL PKG_CHAMPIONS.PROC_INSERT_CHAMP(
+			#{champ.key,     mode=IN, jdbcType=INTEGER},
+  			#{champ.id,      mode=IN, jdbcType=VARCHAR},
+  			#{champ.name,    mode=IN, jdbcType=VARCHAR},
+  			#{champ.title,   mode=IN, jdbcType=VARCHAR},
+  			#{champ.image,   mode=IN, jdbcType=VARCHAR},
+  			#{champ.skins,   mode=IN, jdbcType=VARCHAR},
+  			#{champ.lore,    mode=IN, jdbcType=VARCHAR},
+  			#{champ.info,    mode=IN, jdbcType=VARCHAR},
+  			#{champ.tags,    mode=IN, jdbcType=VARCHAR},
+  			#{champ.stats,   mode=IN, jdbcType=VARCHAR},
+  			#{champ.passive, mode=IN, jdbcType=VARCHAR},
+  			#{champ.spellQ,  mode=IN, jdbcType=VARCHAR},
+  			#{champ.spellW,  mode=IN, jdbcType=VARCHAR},
+  			#{champ.spellE,  mode=IN, jdbcType=VARCHAR},
+  			#{champ.spellR,  mode=IN, jdbcType=VARCHAR}
+  		)}
+  	</insert>
+</mapper> 

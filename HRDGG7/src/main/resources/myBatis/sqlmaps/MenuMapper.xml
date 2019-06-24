@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Menu">
+ 
+ 	<resultMap id="menuMap" type="com.spring.menu.MenuVo">
+		<result property="menu_id" column="MENU_ID" javaType="string" />
+		<result property="menu_name" column="MENU_NAME" javaType="string" />
+		<result property="menu_seq" column="MENU_SEQ" javaType="int" />
+	</resultMap>
+ 
+	<select id="List" statementType="CALLABLE"
+		parameterType="hashmap" resultType="com.spring.menu.MenuVo">
+		{ CALL PKG_MENU.PROC_MENU_LIST(
+			#{ result, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=menuMap }
+		)}
+	</select>
+	
+	<select id="Get" statementType="CALLABLE"
+		parameterType="hashmap" resultType="com.spring.menu.MenuVo">
+		{ CALL PKG_MENU.PROC_MENU_CONTENT(
+			#{ menu_id, mode=IN, jdbcType=VARCHAR },
+			#{ result, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=menuMap }
+		)}
+	</select>
+	
+	<insert id="Add" statementType="CALLABLE">
+	  	{ CALL PKG_MENU.PROC_MENU_INSERT(
+  			#{ menu_name, mode=IN, jdbcType=VARCHAR }
+  		)}
+	</insert>
+	
+	<delete id="Remove" statementType="CALLABLE">
+	  	{ CALL PKG_MENU.PROC_MENU_DELETE(
+			#{ menu_id, mode=IN, jdbcType=VARCHAR }
+  		)}
+	</delete>
+	
+	<update id="Update" statementType="CALLABLE">
+		{ CALL PKG_MENU.PROC_MENU_UPDATE(
+			#{ menu_id, mode=IN, jdbcType=VARCHAR },
+			#{ menu_name, mode=IN, jdbcType=VARCHAR },
+			#{ menu_seq, mode=IN, jdbcType=INTEGER }
+		)} 
+	</update>
+ 
+ </mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+    
+    <mvc:annotation-driven />
+    <context:component-scan base-package="com.spring.*"></context:component-scan>
+    
+    <bean id="viewResolver" 
+       class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name ="prefix" value="/WEB-INF/views/" />  
+        <property name ="suffix" value=".jsp" />  
+    </bean>
+    
+    <!-- css, js, img 사용설정 -->
+    <mvc:resources location="/WEB-INF/resources/css/" mapping="/css/**" />
+    <mvc:resources location="/WEB-INF/resources/js/"  mapping="/js/**" />
+    <mvc:resources location="/WEB-INF/resources/img/" mapping="/img/**" />
+    
+    <!-- 데이터 베이스 연결 --> 
+   <bean id="dataSource" 
+     class="org.apache.commons.dbcp.BasicDataSource" 
+     destroy-method="close">
+     <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+     <property name="url" value="jdbc:oracle:thin:@210.119.12.242:1521:xe" />
+     <property name="username" value="hrdgg" />
+     <property name="password" value="1234" />
+   </bean>
+   
+   <!-- mybatis  사용 설정 SqlSessionFactory 설정
+   SqlSessionFactory : DB연결과 sql 실행 담당   -->  
+   <bean id="sqlSessionFactory" 
+      class="org.mybatis.spring.SqlSessionFactoryBean">
+      <property name="dataSource" ref="dataSource" />
+      <!-- XML Mapper 파일 경로 설정 -->
+      <property name="mapperLocations" 
+       value="classpath:myBatis/sqlmaps/*.xml" />   
+   </bean>
+   
+   <!-- dao 인터페이스를 구현 -->
+   <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
+      destroy-method="clearCache">
+     <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+   </bean>
+   
+   <!-- MultipartResolver 설정 -->
+   <bean id="multipartResolver" class ="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+     <property name="maxUploadSize"   value="100000000" />   <!-- 100M Byte -->
+     <property name="maxInMemorySize" value="100000000" /> 
+   </bean>
+
+</beans>
