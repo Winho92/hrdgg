@@ -1,0 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>    
+
+<footer>
+	<p>
+		© 2019 Busan.pknu. Data League of Legends Korea (동희,수원,길용,승호,태현) &nbsp&nbsp&nbsp Tel .051-123-4567
+		<br/> Add .Busan Metropolitan City, Nam-gu, Yongho-dong PknuUniversity
+	</p>
+</footer>
